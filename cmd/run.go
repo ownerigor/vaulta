@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/ownerigor/vaulta/pkg/models"
+	"github.com/ownerigor/vaulta/pkg/msg"
 	"github.com/spf13/cobra"
 )
 
@@ -23,17 +23,17 @@ func init() {
 func runBackup() {
 	cfg := &models.BackupConfig{}
 	if err := cfg.Load(); err != nil {
-		fmt.Println("Failed to load configuration:", err)
+		msg.Err("Failed to load configuration: %v", err)
 		return
 	}
 
-	fmt.Println("Starting backup process...")
-	fmt.Printf("Database path: %s\n", cfg.DBPath)
-	fmt.Printf("Interval (days): %d\n", cfg.IntervalDays)
-	fmt.Printf("Backup time: %s\n", cfg.BackupHour)
-	fmt.Printf("Backup destination: %s\n", cfg.BackupPath)
+	msg.Info("Starting backup process...")
+	msg.Info("Database Path: %s", cfg.DBPath)
+	msg.Info("Interval (days): %d", cfg.IntervalDays)
+	msg.Info("Backup Time: %s", cfg.BackupHour)
+	msg.Info("Backup Destination: %s", cfg.BackupPath)
 
 	time.Sleep(2 * time.Second)
-	fmt.Println("Backup completed successfully!")
-	fmt.Printf("Backup stored at: %s\n", cfg.BackupPath)
+	msg.Info("Backup completed successfully!")
+	msg.Info("Backup stored at: %s", cfg.BackupPath)
 }

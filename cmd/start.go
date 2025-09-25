@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/ownerigor/vaulta/pkg/models"
+	"github.com/ownerigor/vaulta/pkg/msg"
 	"github.com/spf13/cobra"
 )
 
@@ -25,17 +26,19 @@ func init() {
 func runStart() {
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Print("Enter the database path: ")
+	msg.Info("Starting configuration...")
+
+	msg.Info("Enter the database path: ")
 	dbPath := readLine(reader)
 
-	fmt.Print("Enter the number of days between backups: ")
+	msg.Info("Enter the number of days between backups: ")
 	var interval int
 	fmt.Scanln(&interval)
 
-	fmt.Print("Enter the backup time (HH:MM): ")
+	msg.Info("Enter the backup time (HH:MM): ")
 	backupHour := readLine(reader)
 
-	fmt.Print("Enter the path where backups will be stored: ")
+	msg.Info("Enter the path where backups will be stored: ")
 	backupPath := readLine(reader)
 
 	cfg := &models.BackupConfig{
@@ -46,7 +49,9 @@ func runStart() {
 	}
 
 	if err := cfg.Save(); err != nil {
-		fmt.Println("Failed to save configuration: ", err)
+		msg.Err("Failed to save configuration: %v", err)
+	} else {
+		msg.Info("Configuration saved successfully to config.json")
 	}
 }
 
